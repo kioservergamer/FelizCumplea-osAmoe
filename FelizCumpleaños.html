@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¡Feliz Cumpleaños Amor!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(#ffdde1, #ee9ca7);
+      color: #fff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    .poema-img {
+      max-width: 80%;
+      max-height: 60vh;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .girasol {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 100px;
+      opacity: 0.5;
+      z-index: 10;
+      mix-blend-mode: multiply;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 ¡Feliz cumpleaños, amor! 🎂</h1>
+
+  <!-- Imagen del poema grande -->
+  <img src="poema.jpg" alt="Poema de cumpleaños" class="poema-img">
+
+  <!-- Girasol decorativo -->
+  <img src="girasol.jpg" alt="Girasol" class="girasol">
+
+  <!-- Reproductor de audio oculto (controlado por JS) -->
+  <audio id="musica" autoplay loop>
+    <source src="cancion.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+  </audio>
+
+  <!-- Confeti -->
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // Reproducir música al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      const audio = document.getElementById('musica');
+      audio.volume = 0.5; // volumen moderado
+      audio.play().catch(() => {
+        console.log('Autoplay bloqueado por el navegador');
+      });
+    });
+
+    // Confeti
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confetti = [];
+    const colors = ["#fce18a", "#ff726d", "#b48def", "#f4306d"];
+
+    function Confetto() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.radius = Math.random() * 6 + 4;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.speed = Math.random() * 3 + 2;
+      this.tilt = Math.random() * 10 - 5;
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < confetti.length; i++) {
+        const c = confetti[i];
+        ctx.beginPath();
+        ctx.arc(c.x + c.tilt, c.y, c.radius, 0, Math.PI * 2);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+        c.y += c.speed;
+        c.x += Math.sin(c.y * 0.01);
+        if (c.y > canvas.height) {
+          confetti[i] = new Confetto();
+        }
+      }
+      requestAnimationFrame(drawConfetti);
+    }
+
+    for (let i = 0; i < 150; i++) {
+      confetti.push(new Confetto());
+    }
+
+    drawConfetti();
+  </script>
+</body>
+</html>
+<!-- Reproductor de audio oculto -->
+<audio id="musica" autoplay loop>
+    <source src="cancion.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio HTML5.
+</audio>
+
+<!-- Botón para activar la música si fue bloqueada -->
+<button id="activarMusica" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #e91e63;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 10000;
+  display: none;
+">
+  ▶️ Activar música
+</button>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('musica');
+    const boton = document.getElementById('activarMusica');
+
+    audio.volume = 0.5;
+
+    // Intenta reproducir
+    audio.play().catch(() => {
+      // Si el navegador bloquea el autoplay, muestra el botón
+      boton.style.display = 'block';
+    });
+
+    // Al hacer clic en el botón, intenta reproducir el audio
+    boton.addEventListener('click', () => {
+      audio.play().then(() => {
+        boton.style.display = 'none'; // Oculta el botón si funciona
+      });
+    });
+  });
+</script>
+
+
+
